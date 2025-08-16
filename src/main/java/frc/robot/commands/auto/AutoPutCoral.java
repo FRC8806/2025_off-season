@@ -35,6 +35,6 @@ public class AutoPutCoral extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    // 需要的話加停止
+    m_lift.setRollingSpeed(0);
   }
 }

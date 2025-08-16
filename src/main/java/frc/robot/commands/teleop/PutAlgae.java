@@ -9,7 +9,7 @@ import frc.robot.subsystems.Lift;
 public class PutAlgae extends Command {
   private Lift m_lift;
   private ConsLift.Pose pose;
-  private boolean finish = false, isdown = false, isup = false;
+  private boolean finish = false, isdown = false, isup = false,output = false;
   /** Creates a new PutAlgae. */
   public PutAlgae(Lift m_lift, ConsLift.Pose pose) {
     this.m_lift = m_lift;
@@ -21,18 +21,31 @@ public class PutAlgae extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-     
-
-    if(m_lift.getArmPosition()<= -0.38&& m_lift.getLiftPosition()<=-57){
+     double arm = m_lift.getArmPosition();
+     double lift = m_lift.getLiftPosition();
+    if(arm <= -0.38 && lift <= -57){
       isdown = false;
       isup = true;
        }else{
         isdown = true; 
         isup = false;
       }
+      
+      //黑洞
+      if(arm > -0.15 && lift >= -15){
+        isdown = false;
+        isup = true;
+       }else{
+        isdown = true; 
+        isup = false;
+      }
+
+     
+      }
+
     
      
-  }
+  
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

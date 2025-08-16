@@ -13,7 +13,7 @@ public class Climberup extends Command {
   private final Lift m_lift;
   private final Climber m_climber1; 
   private final ConsLift.Pose pose;
-  private boolean wantup = false,wantupup = false,end = false,test;
+  private boolean wantup = false,wantupup = false,end = false;
 
   public Climberup(Lift m_lift, Climber m_climber, ConsLift.Pose pose) {
     this.m_lift = m_lift;

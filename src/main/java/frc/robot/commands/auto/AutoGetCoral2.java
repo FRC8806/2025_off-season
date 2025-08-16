@@ -1,4 +1,4 @@
-package frc.robot.commands.teleop;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ConsIntake;
@@ -6,7 +6,7 @@ import frc.robot.constants.ConsLift;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
 
-public class GetCoral2 extends Command {
+public class AutoGetCoral2 extends Command {
 
   private final Lift m_lift;
   private Intake m_intake;
@@ -15,7 +15,7 @@ public class GetCoral2 extends Command {
   private boolean isGoingUp = false;   
   private boolean isDone = false;      
 
-  public GetCoral2(Lift m_lift,Intake m_intake) {
+  public AutoGetCoral2(Lift m_lift,Intake m_intake) {
     this.m_lift = m_lift;
     addRequirements(m_lift);  
     this.m_intake = m_intake;
@@ -38,8 +38,8 @@ public class GetCoral2 extends Command {
       m_lift.setPose(ConsLift.Pose.DOWM_CORAL);
       m_lift.setRollingSpeed(ConsLift.coralSpeed);
 
-      boolean armReady = Math.abs(arm - 0) <= 0.1;     
-      boolean liftReady = Math.abs(lift - (-0.5)) <= 1.5; 
+      boolean armReady = Math.abs(arm - 0) <= 0.02;     
+      boolean liftReady = Math.abs(lift - (0.2)) <= 1; 
       if (armReady && liftReady) {
         isGoingDown = false;
         isGoingUp = true; 
@@ -50,9 +50,9 @@ public class GetCoral2 extends Command {
       m_lift.setPose(ConsLift.Pose.UP_CORAL);
       // boolean liftready = Math.abs(lift - (12)) <= 10; if(liftready){
           m_lift.setRollingSpeed(0);// }
-          // m_intake.setPosition(ConsIntake.upPosition);
-          // m_intake.setTransportSpeed(0);
-          // m_intake.setRollingSpeed(0);
+          m_intake.setPosition(ConsIntake.upPosition);
+          m_intake.setTransportSpeed(0);
+          m_intake.setRollingSpeed(0);
 
       if (lift <= -10) {
         isGoingUp = false;

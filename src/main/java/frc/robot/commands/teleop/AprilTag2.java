@@ -5,27 +5,24 @@ import com.pathplanner.lib.path.*;
 import com.studica.frc.AHRS;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Tools;
 import frc.robot.constants.ConsAuto;
 import frc.robot.constants.ConsController;
 import frc.robot.constants.ConsSwerve;
-import frc.robot.constants.ConsLift.Pose;
 import frc.robot.subsystems.DriveTrain;
-//import frc.robot.subsystems.VirtualPose;
-import frc.robot.subsystems.Vision;
-
-import java.util.List;
-import java.util.function.Supplier;
+// import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.DriveTrain;
 
 public class AprilTag2 extends Command {
   private final DriveTrain m_driveTrain;
-  private final Vision m_vision;
+  // private final Vision m_vision;
   public AHRS m_gyro;
-
-  // private final VirtualPose m_VirtualPose;
 
   private final Supplier<Boolean> r1, r2, r3, r10, r11, r12;
   private final Supplier<Double> r4, r5, r6, r7, r8, r9;
@@ -37,9 +34,7 @@ public class AprilTag2 extends Command {
 
   public AprilTag2(
       DriveTrain m_driveTrain,
-      // VirtualPose m_VirtualPose,
-      Vision m_vision,
-
+      // Vision m_vision,
       Supplier<Boolean> r1,
       Supplier<Boolean> r2,
       Supplier<Boolean> r3,
@@ -57,8 +52,8 @@ public class AprilTag2 extends Command {
       Supplier<Double> zAxis,
       Supplier<Boolean> isRed) {
     this.m_driveTrain = m_driveTrain;
-    // this.m_VirtualPose = m_VirtualPose;
-    this.m_vision = m_vision;
+    // this.m_vision = m_vision;
+
     this.r1 = r1;
     this.r2 = r2;
     this.r3 = r3;
@@ -71,162 +66,136 @@ public class AprilTag2 extends Command {
     this.r10 = r10;
     this.r11 = r11;
     this.r12 = r12;
+
     this.xAxis = xAxis;
     this.yAxis = yAxis;
     this.zAxis = zAxis;
     this.isRed = isRed;
-    addRequirements(m_driveTrain, m_vision);
+
+    // addRequirements(m_vision);
   }
 
   @Override
   public void initialize() {
     ConsAuto.setAllianceColor(isRed.get());
+    // 清掉任何舊的期望角度
+    // m_driveTrain.clearDesiredHeadingSupplier();
+    SmartDashboard.putString("AT2_state", "initialized");
   }
-
-  // @Override
-  // public void execute() {
-  // String target = getPressedTarget();
-
-  // if (target != null) {
-  // // 如果目標改變，或沒有正在跑 path，則建立新 path
-  // if (!target.equals(currentTarget) || pathCommand == null ||
-  // pathCommand.isFinished()) {
-
-  // // pathCommand = AutoBuilder.followPath(path);
-  // currentTarget = target;
-  // ConsAuto.Position pos = ConsAuto.pos(target);
-
-  // // 建立中繼點（旋轉方向建議沿著目標方向）
-  // Pose2d start = m_driveTrain.getPose();
-  // Pose2d end = new Pose2d(pos.x, pos.y, start.getRotation());
-
-  // List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(start
-  // , end);
-
-  // PathConstraints constraints = new PathConstraints(
-  // 3, // Max linear velocity (m/s)
-  // 3, // Max linear acceleration (m/s²)
-  // Math.PI, // Max angular velocity
-  // 2 * Math.PI // Max angular acceleration
-  // );
-
-  // PathPlannerPath path = new PathPlannerPath(
-  // waypoints,
-  // constraints, // 速度/加速度限制
-  // null,
-
-  // new GoalEndState(0.0, start.getRotation())
-  // //new GoalEndState(0.5,m_driveTrain.getDiretion())
-  // );
-
-  // // 執行
-
-  // //List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(start, end);
-
-  // path.preventFlipping = true;
-  // Command pathCommand = AutoBuilder.followPath(path);
-  // pathCommand.schedule();
-  // }
-
-  // // 執行 path
-  // // if (pathCommand != null) {
-  // // pathCommand.execute();
-  // // }
-
-  // } else {
-  // // 沒有按 r1~r12，切回手動控制
-  // currentTarget = null;
-  // pathCommand = null;
-
-  // m_driveTrain.drive(
-  // -getDriveControllerAxisOnDeadBand(yAxis.get(), 2) *
-  // ConsSwerve.throttleMaxSpeed,
-  // -getDriveControllerAxisOnDeadBand(xAxis.get(), 2) *
-  // ConsSwerve.throttleMaxSpeed,
-  // getDriveControllerAxisOnDeadBand(zAxis.get(), 2) *
-  // ConsSwerve.kMaxRotationSpeed
-  // );
-  // }
-  // }
 
   @Override
   public void execute() {
-    String target = getPressedTarget(); // null or "r1"~"r12"
+    String target = getPressedTarget();
     boolean joystickMoving = Math.abs(xAxis.get()) > 0.05 || Math.abs(yAxis.get()) > 0.05
         || Math.abs(zAxis.get()) > 0.05;
 
-    if (joystickMoving) {
-      // Joystick moved: cancel auto-alignment if any
-      if (pathCommand != null && pathCommand.isScheduled()) {
-        pathCommand.cancel();
+    if (target != null) {
+      // 有按鈕：只跑自動，忽略搖桿
+      if (!target.equals(currentTarget) || pathCommand == null || pathCommand.isFinished()) {
+        startPathToTarget(target);
       }
-      pathCommand = null;
-      currentTarget = null;
+      SmartDashboard.putString("AT2_state", "following");
+      return;
+    }
 
-      // Manual drive
+    // ===== 沒按鈕：把自動真的取消掉 =====
+    if (pathCommand != null) {
+      if (pathCommand.isScheduled())
+        pathCommand.cancel();
+      pathCommand = null;
+    }
+    currentTarget = null;
+    // m_driveTrain.clearDesiredHeadingSupplier();
+
+    if (joystickMoving) {
+      // 純手動
       m_driveTrain.drive(
           -getDriveControllerAxisOnDeadBand(yAxis.get(), 2) * ConsSwerve.throttleMaxSpeed,
           -getDriveControllerAxisOnDeadBand(xAxis.get(), 2) * ConsSwerve.throttleMaxSpeed,
           getDriveControllerAxisOnDeadBand(zAxis.get(), 2) * ConsSwerve.kMaxRotationSpeed);
-      return;
+      SmartDashboard.putString("AT2_state", "manual-driving");
+    } else {
+      // 沒按鈕 + 沒搖桿：完全不動
+      m_driveTrain.stopModules();
+      SmartDashboard.putString("AT2_state", "hold");
+    }
+  }
+
+  // private void stopAndHold() {
+  //   if (pathCommand != null && pathCommand.isScheduled()) {
+  //     pathCommand.cancel();
+  //   }
+  //   pathCommand = null;
+  //   currentTarget = null;
+
+  //   // 不再給期望角度，避免 autoDrive 再輸出旋轉
+  //   // m_driveTrain.clearDesiredHeadingSupplier();
+
+  //   // 速度清 0，機器人不動
+  //   m_driveTrain.stopModules(); // 等同 drive(new ChassisSpeeds());
+
+  //   SmartDashboard.putString("AT2_state", "hold");
+  // }
+
+  private void startPathToTarget(String target) {
+    SmartDashboard.putString("AT2_startTarget", target);
+
+    // 取消舊 path
+    if (pathCommand != null && pathCommand.isScheduled()) {
+      pathCommand.cancel();
     }
 
-    // If joystick not moving
-    else if (target != null) {
-      if (!target.equals(currentTarget) || pathCommand == null || pathCommand.isFinished()) {
-        // Start new path
-        currentTarget = target;
-        ConsAuto.Position pos = ConsAuto.pos(target);
-        Pose2d start = m_driveTrain.getPose();
-        Pose2d end = new Pose2d(pos.x, pos.y, Rotation2d.fromDegrees(pos.z));// Rotation2d.fromDegrees(pos.z));
+    currentTarget = target;
+    ConsAuto.Position pos = ConsAuto.pos(target);
+    SmartDashboard.putNumber("AT2_goalX", pos.x);
+    SmartDashboard.putNumber("AT2_goalY", pos.y);
+    SmartDashboard.putNumber("AT2_goalZdeg", pos.z);
 
-        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(start,
-            // new Pose2d(pos.x, pos.y, start.getRotation()),
-            end);
+    // 只跑 XY；終點 rotation = 現在角度，避免 PP 幫你轉
+    Pose2d start = m_driveTrain.getPose();
+    Pose2d end = new Pose2d(pos.x, pos.y, Rotation2d.fromDegrees(pos.z));
 
-        PathConstraints constraints = new PathConstraints(3, 3, Math.PI, 2 * Math.PI);
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(start, end);
 
-        PathPlannerPath path = new PathPlannerPath(
-            waypoints,
-            constraints,
-            null,
-            new GoalEndState(0.0, end.getRotation()));
-        path.preventFlipping = true;
+    PathConstraints constraints = new PathConstraints(
+        5.6, // max linear vel (m/s)
+        5, // max linear accel (m/s^2)
+        Math.PI, // max angular vel (rad/s) —— 無所謂，Z 你自己控
+        2 * Math.PI // max angular accel (rad/s^2)
+    );
 
-        pathCommand = AutoBuilder.followPath(path);
-        pathCommand.schedule();
-        currentTarget = target;
-        // ConsAuto.Position pos = ConsAuto.pos(target);
+    PathPlannerPath path = new PathPlannerPath(
+        waypoints,
+        constraints,
+        null,
+        new GoalEndState(0, end.getRotation()));
+    path.preventFlipping = true;
 
-        // // 取得起點與目標 Pose
-        // Pose2d start = m_driveTrain.getPose();
-        // Rotation2d targetRotation = Rotation2d.fromDegrees(pos.z);
-        // Pose2d end = new Pose2d(pos.x, pos.y, targetRotation);
+    // 把期望車頭角度(deg)交給底盤，由 DriveTrain.autoDrive() 的 PID 輸出 ω
+    // m_driveTrain.setDesiredHeadingSupplier(() -> ConsAuto.pos(currentTarget).z);
+    SmartDashboard.putBoolean("AT2_setHeadingSupplier", true);
 
-        // // 使用 fromHolonomicPose 指定移動方向 + 車頭方向（避免亂轉）
-        // List<Waypoint> waypoints = List.of(
-        // PathPoint.fromHolonomicPose(start, start.getRotation()),
-        // PathPoint.fromHolonomicPose(end, targetRotation)
-        // );
-        // // 設定速度與旋轉限制
-        // PathConstraints constraints = new PathConstraints(3, 3, Math.PI, 2 *
-        // Math.PI);
+    pathCommand = AutoBuilder.followPath(path);
+    pathCommand.schedule();
+    SmartDashboard.putBoolean("AT2_pathScheduled", true);
+    SmartDashboard.putString("AT2_state", "following");
+  }
 
-        // // 建立 path 並指定目標車頭方向
-        // PathPlannerPath path = new PathPlannerPath(
-        // waypoints,
-        // constraints,
-        // null,
-        // new GoalEndState(0.0, targetRotation)
-        // );
-        // path.preventFlipping = true;
-
-        // // 開始執行路徑
-        // pathCommand = AutoBuilder.followPath(path);
-        // pathCommand.schedule();
-      }
+  private void cancelPathAndReturnToManual() {
+    if (pathCommand != null && pathCommand.isScheduled()) {
+      pathCommand.cancel();
     }
-    // else: not pressing any button but already in auto — continue following
+    pathCommand = null;
+    currentTarget = null;
+
+    // 回到手動時，不要再鎖角度
+    // m_driveTrain.clearDesiredHeadingSupplier();
+    SmartDashboard.putString("AT2_state", "manual");
+
+    m_driveTrain.drive(
+        -getDriveControllerAxisOnDeadBand(yAxis.get(), 2) * ConsSwerve.throttleMaxSpeed,
+        -getDriveControllerAxisOnDeadBand(xAxis.get(), 2) * ConsSwerve.throttleMaxSpeed,
+        getDriveControllerAxisOnDeadBand(zAxis.get(), 2) * ConsSwerve.kMaxRotationSpeed);
   }
 
   private String getPressedTarget() {
@@ -237,7 +206,7 @@ public class AprilTag2 extends Command {
     if (r3.get())
       return "r3";
     if (r4.get() == 1)
-      return "r4";// trigger
+      return "r4";
     if (r5.get() == 1)
       return "r5";
     if (r6.get() == -1)
@@ -259,9 +228,22 @@ public class AprilTag2 extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    if (pathCommand != null) {
-      pathCommand.end(interrupted);
+    // 1) 確保路徑真的停掉
+    if (pathCommand != null && pathCommand.isScheduled()) {
+      pathCommand.cancel();
     }
+    pathCommand = null;
+
+    // 2) 先把「目標朝向」關掉，避免 autoDrive 用 vz 再輸出 ω
+    // m_driveTrain.clearDesiredHeadingSupplier();
+
+    // 如有用過 overrideRotationFeedback，順手清掉（安全起見）
+    // PPHolonomicDriveController.overrideRotationFeedback(null);
+
+    // 3) 停車（清 0 速度）
+    m_driveTrain.stopModules(); // 等同 drive(new ChassisSpeeds())
+
+    SmartDashboard.putString("AT2_state", interrupted ? "ended(interrupted)" : "ended");
   }
 
   @Override

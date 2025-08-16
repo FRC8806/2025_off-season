@@ -26,10 +26,6 @@ public class AutoGetCoral extends Command {
 
   @Override
   public void initialize() {
-    speedOK = false;
-    transportTripped = false;
-    liftStarted = false;
-    isDone = false;
 
     // 啟動 Intake 吸 Coral
     m_intake.setPosition(ConsIntake.downPosition);
@@ -39,40 +35,18 @@ public class AutoGetCoral extends Command {
 
   @Override
   public void execute() {
-    double speed = m_intake.getTransportSpeed();
+    double Angle = m_intake.getPosition();
 
-    // 第一階段：檢查是否碰到 Coral（速度高）
-    if (speed > 30) {
-      speedOK = true;
-    }
-
-    // 第二階段：Coral 被吸進去 → 速度變低，啟動 lift 動作
-    if (speedOK && speed < 29.6 && !transportTripped) {
-      m_intake.setPosition(ConsIntake.upPosition);
-      m_intake.setRollingSpeed(0);
-      timer.reset();
-      timer.start();
-      transportTripped = true;
-    }
-
-    // 第三階段：等 0.3 秒後再執行 lift
-    if (transportTripped && !liftStarted && timer.hasElapsed(0.3)) {
-      m_intake.setTransportSpeed(0);
-      m_lift.setPose(ConsLift.Pose.DOWM_CORAL);
-      m_lift.setRollingSpeed(ConsLift.coralSpeed);
-      liftStarted = true;
-      timer.stop();
-    }
-
-    // 第四階段：lift 到達指定位置後完成命令
-    if (liftStarted && m_lift.getLiftPosition() <= ConsLift.Pose.DOWM_CORAL.pos_lift + 0.1) {
+    if (Angle >= -2) {
       isDone = true;
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    // 可依需求關閉動作
+    m_intake.setTransportSpeed(ConsIntake.transportSpeed);
+    m_intake.setRollingSpeed(ConsIntake.rollingSpeed);
+
   }
 
   @Override

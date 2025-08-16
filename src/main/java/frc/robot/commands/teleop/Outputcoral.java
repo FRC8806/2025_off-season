@@ -1,55 +1,44 @@
 package frc.robot.commands.teleop;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ConsIntake;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Lift;
-import edu.wpi.first.wpilibj.Timer;
+
 public class Outputcoral extends Command {
+  private final Intake m_intake;
 
-  private Intake m_intake;
-  private boolean  intakeGet = false;
-
-  private final Timer timer = new Timer();
-
-//   private boolean speedOK = false;
-//   private boolean isUp = false;
-
-  public Outputcoral(Intake m_intake) {
-    this.m_intake = m_intake;
+  public Outputcoral(Intake intake) {
+    this.m_intake = intake;
     addRequirements(m_intake);
-  }   
+  }
 
-  // Called when the command is initially scheduled.
+  // 按下時觸發一次，可用於初始化狀態
   @Override
-  public void initialize() {
-    if(m_intake.getPosition()>-18.5){
-      m_intake.setRollingSpeed(0);  
-     }else{
-      m_intake.setRollingSpeed(-0.3); 
-      m_intake.setTransportSpeed(-0.3); 
-     }
-     }
+  public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
+  // 按住期間每個 scheduler 週期都會呼叫
   @Override
   public void execute() {
-
-   
-
+    // 依需求決定要不要檢查位置
+    if (m_intake.getPosition() > -18.5) {
+      m_intake.setRollingSpeed(0);
+      m_intake.setTransportSpeed(0);
+    } else {
+      m_intake.setRollingSpeed(-0.3);
+      m_intake.setTransportSpeed(-0.3);
+    }
   }
 
-  // Called once the command ends or is interrupted.
+  // 當按鈕放開（指令被中斷）時會呼叫，確保馬達停轉
   @Override
   public void end(boolean interrupted) {
+    m_intake.setRollingSpeed(ConsIntake.rollingSpeed);
+    m_intake.setTransportSpeed(ConsIntake.transportSpeed);
   }
 
-  // Returns true when the command should end.
+  // 始終為 false，讓指令持續執行直到被外部中斷
   @Override
   public boolean isFinished() {
-     return intakeGet;
+    return false;
   }
 }
-
-

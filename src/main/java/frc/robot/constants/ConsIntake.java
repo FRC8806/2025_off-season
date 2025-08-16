@@ -18,7 +18,7 @@ public class ConsIntake {
 
 
     //PID
-    private static final Slot0Configs angleSlot0 = new Slot0Configs().withKP(1.2).withKI(0.05).withKD(0.2);//
+    private static final Slot0Configs angleSlot0 = new Slot0Configs().withKP(1.3).withKI(0.05).withKD(0.2);//
 
     //limit
     private static final SoftwareLimitSwitchConfigs angleLimit = new SoftwareLimitSwitchConfigs()
@@ -33,5 +33,5 @@ public class ConsIntake {
 
     //position
     public static final double upPosition = 0;//
-    public static final double downPosition =-19.13134765625;//
+    public static final double downPosition =-34;//-19.13134765625//-19.69
 }

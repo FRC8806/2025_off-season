@@ -5,12 +5,12 @@ import java.util.Map;
 
 public class ConsAuto {
   public enum PositionName {
-    r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12
+    r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, B1, B2, B3
   }
 
   public static class Position {
     public final double x, y, z;
-  
+
     public Position(double x, double y, double z) {
       this.x = x;
       this.y = y;
@@ -47,23 +47,30 @@ public class ConsAuto {
     RED_POSITIONS.put(PositionName.r10, new Position(13.651, 5.378, 60));
     RED_POSITIONS.put(PositionName.r11, new Position(13.941, 5.214, 60));
     RED_POSITIONS.put(PositionName.r12, new Position(14.5, 4.193, 0));
+    RED_POSITIONS.put(PositionName.B1, new Position(14.5, 4.193, 0));
+    RED_POSITIONS.put(PositionName.B2, new Position(14.5, 4.193, 0));
+    RED_POSITIONS.put(PositionName.B3, new Position(14.5, 4.193, 0));
 
-    BLUE_POSITIONS.put(PositionName.r1, new Position(3.097252789383869, 4.238601838605371, 180));
-    BLUE_POSITIONS.put(PositionName.r2, new Position(3.6220668706568615, 5.208761711783277, -60));//3.64,5.189
-    BLUE_POSITIONS.put(PositionName.r3, new Position(3.9414385701436214, 5.366222037240583, 120));//3.925,5.353
-    BLUE_POSITIONS.put(PositionName.r4, new Position(5.089007434526264, 5.318804374579443, 60));//
-    BLUE_POSITIONS.put(PositionName.r5, new Position(5.408497596481436, 5.153439760905154, 60));//
-    BLUE_POSITIONS.put(PositionName.r6, new Position(5.891864991097945, 4.171499249538577, 0));//
-    BLUE_POSITIONS.put(PositionName.r7, new Position(5.927356837113303, 3.8370305156669398, 0));//
-    BLUE_POSITIONS.put(PositionName.r8, new Position(5.300692371365355, 2.822505803592738, -60));
-    BLUE_POSITIONS.put(PositionName.r9, new Position(4.994593666574269, 2.709344111193596, -60));
-    BLUE_POSITIONS.put(PositionName.r10, new Position(3.8654971188190186, 2.8192787286917196, -120));
-    BLUE_POSITIONS.put(PositionName.r11, new Position(3.6552134474652083, 2.937000141763921, -120));//
-    BLUE_POSITIONS.put(PositionName.r12, new Position(3.1362454606429506, 3.7788990186050646, 180));//
+    BLUE_POSITIONS.put(PositionName.r1, new Position(3.052, 4.186, 180));
+    BLUE_POSITIONS.put(PositionName.r2, new Position(3.640, 5.189, 120));
+    BLUE_POSITIONS.put(PositionName.r3, new Position(3.925, 5.353, 120));
+    BLUE_POSITIONS.put(PositionName.r4, new Position(5.05, 5.351, 60));
+    BLUE_POSITIONS.put(PositionName.r5, new Position(5.348, 5.179, 60));
+    BLUE_POSITIONS.put(PositionName.r6, new Position(5.93, 4.186, 0));
+    BLUE_POSITIONS.put(PositionName.r7, new Position(5.93, 3.857, 0));
+    BLUE_POSITIONS.put(PositionName.r8, new Position(5.341, 2.87, -60));
+    BLUE_POSITIONS.put(PositionName.r9, new Position(5.06, 2.702, -60));
+    BLUE_POSITIONS.put(PositionName.r10, new Position(3.941, 2.691, -120));
+    BLUE_POSITIONS.put(PositionName.r11, new Position(3.634, 2.872, -120));
+    BLUE_POSITIONS.put(PositionName.r12, new Position(3.052, 3.854, 180));
+    BLUE_POSITIONS.put(PositionName.B1, new Position(1, 2.194, 180));//
+    BLUE_POSITIONS.put(PositionName.B2, new Position(2.063, 4.040, 180));//
+    BLUE_POSITIONS.put(PositionName.B3, new Position(2.238, 2.194, 180));//
+
   }
 
   public static Position pos(String name) {
     return getPosition(PositionName.valueOf(name));
-}
+  }
 
 }

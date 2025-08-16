@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.Timer;
 public class AutoGetCoral extends Command {
   private final Intake m_intake;
   private final Lift m_lift;
-
-  private boolean speedOK = false;
-  private boolean transportTripped = false;
-  private boolean liftStarted = false;
-  private boolean isDone = false;
+  
+  private boolean isGoingUp = false;   
+  private boolean isDone = false;     
+  private boolean isGoingDown = false;     
+  private boolean start = false;     
 
   private final Timer timer = new Timer();
 
@@ -26,8 +26,11 @@ public class AutoGetCoral extends Command {
 
   @Override
   public void initialize() {
-
-    // 啟動 Intake 吸 Coral
+    
+    isGoingUp = false;  
+    isDone = false;     
+    isGoingDown = false;
+    start = true;     
     m_intake.setPosition(ConsIntake.downPosition);
     m_intake.setTransportSpeed(ConsIntake.transportSpeed);
     m_intake.setRollingSpeed(ConsIntake.rollingSpeed);
@@ -35,18 +38,44 @@ public class AutoGetCoral extends Command {
 
   @Override
   public void execute() {
-    double Angle = m_intake.getPosition();
-
-    if (Angle >= -2) {
-      isDone = true;
+    double lift = m_lift.getLiftPosition();
+    double arm = m_lift.getArmPosition();
+  //  boolean isGoingDown = m_intake.getIR()>= 25;
+    if(start && m_intake.getIR()>= 25){
+      isGoingDown = true;
+      start = false;
     }
+    if(isGoingDown){
+      m_lift.setPose(ConsLift.Pose.DOWM_CORAL);
+      m_lift.setRollingSpeed(ConsLift.coralSpeed);
+
+      boolean armReady = Math.abs(arm - 0) <= 0.03;     
+      boolean liftReady = Math.abs(lift - (0.2)) <= 1; 
+      if (armReady && liftReady) {
+        isGoingDown = false;
+        isGoingUp = true; 
+      }
+    }
+  
+    if (isGoingUp) {
+        m_lift.setPose(ConsLift.Pose.UP_CORAL);
+          m_lift.setRollingSpeed(0);// }
+          m_intake.setPosition(ConsIntake.upPosition);
+          m_intake.setTransportSpeed(0);
+          m_intake.setRollingSpeed(0);
+
+      if (lift <= -10) {
+        isGoingUp = false;
+        isDone = true; 
+      }
+    }
+
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_intake.setTransportSpeed(ConsIntake.transportSpeed);
-    m_intake.setRollingSpeed(ConsIntake.rollingSpeed);
-
+     isGoingUp = false;
+     isDone = false;
   }
 
   @Override

@@ -16,11 +16,12 @@ import frc.robot.commands.auto.AutoGetCoral2;
 import frc.robot.commands.auto.AutoPutCoral;
 import frc.robot.commands.auto.AutoTag;
 import frc.robot.commands.auto.ZeroSpeed;
-import frc.robot.commands.teleop.AprilTag2;
+import frc.robot.commands.teleop.ReefAlign;
 import frc.robot.commands.teleop.ClimberDefaultCommand;
 import frc.robot.commands.teleop.Climberup;
 import frc.robot.commands.teleop.Climberupup;
 import frc.robot.commands.teleop.GetAlgae;
+import frc.robot.commands.teleop.GetCoral;
 import frc.robot.commands.teleop.GetCoral1;
 import frc.robot.commands.teleop.GetCoral2;
 import frc.robot.commands.teleop.L1;
@@ -98,7 +99,7 @@ public class RobotContainer {
             m_buttonBroadController.getBButton() ||
             m_buttonBroadController.getXButton()))
         .whileTrue(
-            new AprilTag2(
+            new ReefAlign(
                 m_driveTrain,
                 () -> m_buttonBroadController.getYButton(),
                 () -> m_buttonBroadController.getLeftBumperButton(),
@@ -153,14 +154,14 @@ public class RobotContainer {
     //     ConsController.Button.BUTTON_BACK.id).onTrue(
     //         new Climberup(m_lift, m_climber,
     //             ConsLift.Pose.climber));
-    // new JoystickButton(m_driveController,
-    //     ConsController.Button.BUTTON_RB.id).onTrue(new GetCoral1(m_intake, m_lift));
-    // new JoystickButton(m_driveController,
-    //     ConsController.Button.BUTTON_RB.id).onFalse(new GetCoral1(m_intake, m_lift));
-    // new JoystickButton(m_driveController,
-    //     ConsController.Button.BUTTON_LB.id).whileTrue(new Outputcoral(m_intake));
+    new JoystickButton(m_driveController,
+        ConsController.Button.BUTTON_RB.id).whileTrue(new GetCoral1(m_intake));
+    new JoystickButton(m_driveController,
+        ConsController.Button.BUTTON_LB.id).whileTrue(new Outputcoral(m_intake));
     // /*
     //  * =============================================================================
+    new JoystickButton(m_driveController, ConsController.Button.BUTTON_B.id).toggleOnTrue(new GetCoral(m_intake,m_lift));
+
     //  * =======================================================================
     //  */
     // new JoystickButton(m_driveController,

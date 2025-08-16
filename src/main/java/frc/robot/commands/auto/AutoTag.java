@@ -12,13 +12,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.constants.ConsAuto;
 import frc.robot.constants.ConsSwerve;
-import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.DriveTrain;
 
 import java.util.List;
@@ -46,21 +44,21 @@ public class AutoTag extends SequentialCommandGroup {
 
   private final DriveTrain driveTrain;
   private final ConsAuto.PositionName posName; // 依聯盟鏡像
-  private final ConsAuto.Position fixedPos;    // 不鏡像
+  // private final ConsAuto.Pose2d fixedPos;    // 不鏡像
 
   public AutoTag(DriveTrain driveTrain, ConsAuto.PositionName posName) {
     this.driveTrain = driveTrain;
     this.posName = posName;
-    this.fixedPos = null;
+    // this.fixedPos = null;
     build();
   }
 
-  public AutoTag(DriveTrain driveTrain, ConsAuto.Position position) {
-    this.driveTrain = driveTrain;
-    this.posName = null;
-    this.fixedPos = position;
-    build();
-  }
+  // public AutoTag(DriveTrain driveTrain, ConsAuto.Pose2d position) {
+  //   this.driveTrain = driveTrain;
+  //   this.posName = null;
+  //   this.fixedPos = position;
+  //   build();
+  // }
 
   private void build() {
     addRequirements(driveTrain);
@@ -77,10 +75,10 @@ public class AutoTag extends SequentialCommandGroup {
       // B) 先用 PP 拉到附近：末速留一點避免睡死；終點角=起點角（但我們不控制 Z）
       Commands.defer(() -> {
         Pose2d start = driveTrain.getPose();
-        ConsAuto.Position p = resolvePos();
+        Pose2d p = resolvePos();
 
         Rotation2d endRot = start.getRotation(); // PP 的終點角，僅避免切換時自轉
-        Pose2d end = new Pose2d(p.x, p.y, endRot);
+        Pose2d end = new Pose2d(p.getX(), p.getY(), endRot);
 
         List<Waypoint> wps = PathPlannerPath.waypointsFromPoses(start, end);
 
@@ -92,19 +90,19 @@ public class AutoTag extends SequentialCommandGroup {
         );
         path.preventFlipping = true;
 
-        SmartDashboard.putNumber("AutoTag/targetX", p.x);
-        SmartDashboard.putNumber("AutoTag/targetY", p.y);
+        SmartDashboard.putNumber("AutoTag/targetX", p.getX());
+        SmartDashboard.putNumber("AutoTag/targetY", p.getY());
 
         return AutoBuilder.followPath(path);
       }, Set.of(driveTrain)),
 
       // C) creep 收尾：只看 XY，角速度固定為 0
       Commands.run(() -> {
-        ConsAuto.Position p = resolvePos();
+        Pose2d p = resolvePos();
         Pose2d cur = driveTrain.getPose();
 
-        double dx = p.x - cur.getX();
-        double dy = p.y - cur.getY();
+        double dx = p.getX() - cur.getX();
+        double dy = p.getY() - cur.getY();
         double dist = Math.hypot(dx, dy);
 
         double dirX = (dist > 1e-9) ? dx / dist : 0.0;
@@ -127,10 +125,10 @@ public class AutoTag extends SequentialCommandGroup {
       }, driveTrain).until(new java.util.function.BooleanSupplier() {
         final double[] insideSince = { -1.0 };
         @Override public boolean getAsBoolean() {
-          ConsAuto.Position p = resolvePos();
+          Pose2d p = resolvePos();
           Pose2d cur = driveTrain.getPose();
 
-          double dist = Math.hypot(p.x - cur.getX(), p.y - cur.getY());
+          double dist = Math.hypot(p.getX() - cur.getX(), p.getY() - cur.getY());
           double now = Timer.getFPGATimestamp();
 
           if (dist <= FINISH_TOL_M) {
@@ -151,7 +149,7 @@ public class AutoTag extends SequentialCommandGroup {
     );
   }
 
-  private ConsAuto.Position resolvePos() {
-    return (posName != null) ? ConsAuto.getPosition(posName) : fixedPos;
+  private Pose2d resolvePos() {
+    return ConsAuto.getPosition(posName);
   }
 }

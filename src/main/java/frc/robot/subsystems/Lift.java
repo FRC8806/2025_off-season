@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ConsLift;
 
 public class Lift extends SubsystemBase {
-
-  
   private final TalonFX liftMotor = new TalonFX(ConsLift.LIFT_MOTOR_ID);
   private final TalonFX armAngleMotor = new TalonFX(ConsLift.ARM_ANGLE_MOTOR_ID);
   private final TalonFX rollingMotor = new TalonFX(ConsLift.ROLLING_MOTOR_ID);

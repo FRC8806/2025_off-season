@@ -3,12 +3,16 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ConsIntake;
 
 public class Intake extends SubsystemBase {
+  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
   private TalonFX leftTransportMotor = new TalonFX(ConsIntake.LEFT_TRANSPORT_MOTOR_ID);
   private TalonFX rightTransportMotor = new TalonFX(ConsIntake.RIGHT_TRANSPORT_MOTOR_ID);
@@ -16,10 +20,6 @@ public class Intake extends SubsystemBase {
   private TalonFX rollingMotor = new TalonFX(ConsIntake.ROLLING_MOTOR_ID);
 
   private final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
-
-
-//   private boolean isUp = false;
-
 
   public Intake() {
     //angle motor
@@ -32,15 +32,13 @@ public class Intake extends SubsystemBase {
 
     //rolling
     rollingMotor.setNeutralMode(NeutralModeValue.Coast);
-  
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake position", getPosition());
     SmartDashboard.putNumber("transport speed", getTransportSpeed());
-
-    
+    SmartDashboard.putNumber("colorIR", getIR());
   }
   public void setRollingSpeedout(double speed){
     rollingMotor.set(-speed);
@@ -51,7 +49,7 @@ public class Intake extends SubsystemBase {
 
   public void setTransportSpeed(double speed){
     rightTransportMotor.set(-speed);
-    leftTransportMotor.set(speed);//正反自己測
+    leftTransportMotor.set(speed);
   }
 
   public void getCoral(){
@@ -81,6 +79,15 @@ public class Intake extends SubsystemBase {
 
   public void setPosition(double position){
     angleMotor.setControl(m_request.withPosition(position));
+  }
+
+  //color sensor
+  public Color getColor() {
+    return m_colorSensor.getColor();
+  }
+
+  public double getIR() {
+    return m_colorSensor.getIR();
   }
 
 }

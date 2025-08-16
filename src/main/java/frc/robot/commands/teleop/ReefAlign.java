@@ -19,7 +19,7 @@ import frc.robot.subsystems.DriveTrain;
 // import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.DriveTrain;
 
-public class AprilTag2 extends Command {
+public class ReefAlign extends Command {
   private final DriveTrain m_driveTrain;
   // private final Vision m_vision;
   public AHRS m_gyro;
@@ -30,9 +30,9 @@ public class AprilTag2 extends Command {
   private final Supplier<Boolean> isRed;
 
   private Command pathCommand = null;
-  private String currentTarget = null;
+  private ConsAuto.PositionName currentTarget = null;
 
-  public AprilTag2(
+  public ReefAlign(
       DriveTrain m_driveTrain,
       // Vision m_vision,
       Supplier<Boolean> r1,
@@ -85,7 +85,7 @@ public class AprilTag2 extends Command {
 
   @Override
   public void execute() {
-    String target = getPressedTarget();
+    ConsAuto.PositionName target = getPressedTarget();
     boolean joystickMoving = Math.abs(xAxis.get()) > 0.05 || Math.abs(yAxis.get()) > 0.05
         || Math.abs(zAxis.get()) > 0.05;
 
@@ -137,8 +137,8 @@ public class AprilTag2 extends Command {
   //   SmartDashboard.putString("AT2_state", "hold");
   // }
 
-  private void startPathToTarget(String target) {
-    SmartDashboard.putString("AT2_startTarget", target);
+  private void startPathToTarget(ConsAuto.PositionName target) {
+    SmartDashboard.putString("AT2_startTarget", target.name());
 
     // 取消舊 path
     if (pathCommand != null && pathCommand.isScheduled()) {
@@ -146,14 +146,14 @@ public class AprilTag2 extends Command {
     }
 
     currentTarget = target;
-    ConsAuto.Position pos = ConsAuto.pos(target);
-    SmartDashboard.putNumber("AT2_goalX", pos.x);
-    SmartDashboard.putNumber("AT2_goalY", pos.y);
-    SmartDashboard.putNumber("AT2_goalZdeg", pos.z);
+    Pose2d targetPose = ConsAuto.pos(target);
+    SmartDashboard.putNumber("AT2_goalX", targetPose.getX());
+    SmartDashboard.putNumber("AT2_goalY", targetPose.getY());
+    SmartDashboard.putNumber("AT2_goalZdeg", targetPose.getRotation().getRotations());
 
     // 只跑 XY；終點 rotation = 現在角度，避免 PP 幫你轉
     Pose2d start = m_driveTrain.getPose();
-    Pose2d end = new Pose2d(pos.x, pos.y, Rotation2d.fromDegrees(pos.z));
+    Pose2d end = targetPose;
 
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(start, end);
 
@@ -198,31 +198,31 @@ public class AprilTag2 extends Command {
         getDriveControllerAxisOnDeadBand(zAxis.get(), 2) * ConsSwerve.kMaxRotationSpeed);
   }
 
-  private String getPressedTarget() {
+  private ConsAuto.PositionName getPressedTarget() {
     if (r1.get())
-      return "r1";
+      return ConsAuto.PositionName.r1;
     if (r2.get())
-      return "r2";
+      return ConsAuto.PositionName.r2;
     if (r3.get())
-      return "r3";
+    return ConsAuto.PositionName.r3;
     if (r4.get() == 1)
-      return "r4";
+    return ConsAuto.PositionName.r4;
     if (r5.get() == 1)
-      return "r5";
+    return ConsAuto.PositionName.r5;
     if (r6.get() == -1)
-      return "r6";
+    return ConsAuto.PositionName.r6;
     if (r7.get() == 1)
-      return "r7";
+    return ConsAuto.PositionName.r7;
     if (r8.get() == 1)
-      return "r8";
+    return ConsAuto.PositionName.r8;
     if (r9.get() == -1)
-      return "r9";
+    return ConsAuto.PositionName.r9;
     if (r10.get())
-      return "r10";
+    return ConsAuto.PositionName.r10;
     if (r11.get())
-      return "r11";
+    return ConsAuto.PositionName.r11;
     if (r12.get())
-      return "r12";
+    return ConsAuto.PositionName.r12;
     return null;
   }
 

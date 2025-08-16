@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ConsLift;
 import frc.robot.subsystems.Lift;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class L1 extends Command {
   private Lift m_lift;
   private ConsLift.Pose pose;
-  private boolean finish = false, isdown = false, isup = false,output = false;
+  private boolean finish = false, isdown = false, isup = false, output = false;
+
   /** Creates a new PutAlgae. */
   public L1(Lift m_lift, ConsLift.Pose pose) {
     this.m_lift = m_lift;
@@ -17,41 +17,43 @@ public class L1 extends Command {
     addRequirements(m_lift);
     // Use addRequirements() here to declare subsystem dependencies.
   }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-     double arm = m_lift.getArmPosition();
-     double lift = m_lift.getLiftPosition();
-    if(Math.abs(arm - (-0.15)) <= 0.02 && Math.abs(lift - (-18)) <= 2){
+    double arm = m_lift.getArmPosition();
+    double lift = m_lift.getLiftPosition();
+    if (Math.abs(arm - (-0.15)) <= 0.02 && Math.abs(lift - (-18)) <= 2) {
       isdown = false;
       isup = true;
-       }else{
-        isdown = true; 
-        isup = false;
-      }
-        }
+    } else {
+      isdown = true;
+      isup = false;
+    }
+  }
 
-        @Override
+  @Override
   public void execute() {
     // m_lift.setPose(pose);
-  
-    if(isup){
+
+    if (isup) {
       m_lift.setPose(pose);
       m_lift.setRollingSpeed(-0.25);
     }
-    if(isdown){
+    if (isdown) {
       m_lift.setPose(pose);
       m_lift.setRollingSpeed(0);
       // isdown = false;
     }
-    SmartDashboard.putBoolean("isdown",isdown);
-    SmartDashboard.putBoolean("isup" ,  isup);
+    SmartDashboard.putBoolean("isdown", isdown);
+    SmartDashboard.putBoolean("isup", isup);
 
   }
+
   @Override
   public void end(boolean interrupted) {
-      isdown = false; 
-        isup = false;
+    isdown = false;
+    isup = false;
   }
 
   @Override
@@ -59,5 +61,3 @@ public class L1 extends Command {
     return finish;
   }
 }
-
-

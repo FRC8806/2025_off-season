@@ -10,16 +10,17 @@ public class Outputcoral extends Command {
   public Outputcoral(Intake intake) {
     this.m_intake = intake;
     addRequirements(m_intake);
+    
   }
 
   // 按下時觸發一次，可用於初始化狀態
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // 按住期間每個 scheduler 週期都會呼叫
   @Override
   public void execute() {
-    // 依需求決定要不要檢查位置
     if (m_intake.getPosition() > -18.5) {
       m_intake.setRollingSpeed(0);
       m_intake.setTransportSpeed(0);
@@ -34,6 +35,8 @@ public class Outputcoral extends Command {
   public void end(boolean interrupted) {
     m_intake.setRollingSpeed(ConsIntake.rollingSpeed);
     m_intake.setTransportSpeed(ConsIntake.transportSpeed);
+    m_intake.setPosition(ConsIntake.downPosition);
+
   }
 
   // 始終為 false，讓指令持續執行直到被外部中斷

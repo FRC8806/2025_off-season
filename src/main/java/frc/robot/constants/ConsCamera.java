@@ -37,10 +37,10 @@ public final class ConsCamera {
   // 右相機：位置 (-0.197058, +0.288, 0.173) m；姿態 roll=0, pitch=+15°, yaw=+15° + 180° = 195°
   public static final Transform3d kCameraToRobotRight =
       new Transform3d(
-          new Translation3d(-0.197058, 0.288, 0.173),
+          new Translation3d(-0.197058, 0.288, 0.173),//-0.197058, 0.288, 0.173
           new Rotation3d(
               0.0,
-              Math.toRadians(15.0),
+              Math.toRadians(15.0),//15
               Math.toRadians(166.142)   // 等同 -165°
           )
       );

@@ -39,7 +39,7 @@ public class GetCoral extends Command {
     public void execute() {
         double lift = m_lift.getLiftPosition();
         double arm = m_lift.getArmPosition();
-     if(start && m_intake.getIR()>= 25){
+     if(start && m_intake.getIR()>= 400){
         isGoingDown = true; 
         start = false;
      }

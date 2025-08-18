@@ -39,6 +39,7 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("intake position", getPosition());
     SmartDashboard.putNumber("transport speed", getTransportSpeed());
     SmartDashboard.putNumber("colorIR", getIR());
+    SmartDashboard.putNumber("rs", getRollingSpeed());
   }
   public void setRollingSpeedout(double speed){
     rollingMotor.set(-speed);
@@ -69,7 +70,7 @@ public class Intake extends SubsystemBase {
   public double getPosition(){
     return angleMotor.getPosition().getValueAsDouble();
   }
-  public double getrollingspeed(){
+  public double getRollingSpeed(){
     return rollingMotor.getVelocity().getValueAsDouble();
   }
 

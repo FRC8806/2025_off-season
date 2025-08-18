@@ -6,15 +6,16 @@ import frc.robot.constants.ConsLift;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoGetCoral extends Command {
   private final Intake m_intake;
   private final Lift m_lift;
-  
-  private boolean isGoingUp = false;   
-  private boolean isDone = false;     
-  private boolean isGoingDown = false;     
-  private boolean start = false;     
+
+  private boolean isGoingUp = false;
+  private boolean isDone = false;
+  private boolean isGoingDown = false;
+  private boolean start = false;
 
   private final Timer timer = new Timer();
 
@@ -26,47 +27,58 @@ public class AutoGetCoral extends Command {
 
   @Override
   public void initialize() {
-    
-    isGoingUp = false;  
-    isDone = false;     
+    isGoingUp = false;
+    isDone = false;
     isGoingDown = false;
-    start = true;     
+    start = true;
     m_intake.setPosition(ConsIntake.downPosition);
     m_intake.setTransportSpeed(ConsIntake.transportSpeed);
     m_intake.setRollingSpeed(ConsIntake.rollingSpeed);
+
+    timer.reset();
+    timer.start();
   }
 
   @Override
   public void execute() {
     double lift = m_lift.getLiftPosition();
     double arm = m_lift.getArmPosition();
-  //  boolean isGoingDown = m_intake.getIR()>= 25;
-    if(start && m_intake.getIR()>= 25){
+    // boolean isGoingDown = m_intake.getIR()>= 25;
+    if (!isGoingDown && timer.hasElapsed(4.0)) {
+      start = false;
+      m_intake.setTransportSpeed(-0.9);
+      m_intake.setRollingSpeed(-0.3);
+      if (m_intake.getTransportSpeed() >= 90) {
+        start = true;
+      }
+    }
+
+    if (start && m_intake.getIR() >= 400) {
       isGoingDown = true;
       start = false;
     }
-    if(isGoingDown){
+    if (isGoingDown) {
       m_lift.setPose(ConsLift.Pose.DOWM_CORAL);
       m_lift.setRollingSpeed(ConsLift.coralSpeed);
 
-      boolean armReady = Math.abs(arm - 0) <= 0.03;     
-      boolean liftReady = Math.abs(lift - (0.2)) <= 1; 
+      boolean armReady = Math.abs(arm - 0) <= 0.03;
+      boolean liftReady = Math.abs(lift - (0.2)) <= 1;
       if (armReady && liftReady) {
         isGoingDown = false;
-        isGoingUp = true; 
+        isGoingUp = true;
       }
     }
-  
+
     if (isGoingUp) {
-        m_lift.setPose(ConsLift.Pose.UP_CORAL);
-          m_lift.setRollingSpeed(0);// }
-          m_intake.setPosition(ConsIntake.upPosition);
-          m_intake.setTransportSpeed(0);
-          m_intake.setRollingSpeed(0);
+      m_lift.setPose(ConsLift.Pose.UP_CORAL);
+      m_lift.setRollingSpeed(0);// }
+      m_intake.setPosition(ConsIntake.upPosition);
+      m_intake.setTransportSpeed(0);
+      m_intake.setRollingSpeed(0);
 
       if (lift <= -10) {
         isGoingUp = false;
-        isDone = true; 
+        isDone = true;
       }
     }
 
@@ -74,8 +86,8 @@ public class AutoGetCoral extends Command {
 
   @Override
   public void end(boolean interrupted) {
-     isGoingUp = false;
-     isDone = false;
+    isGoingUp = false;
+    isDone = false;
   }
 
   @Override

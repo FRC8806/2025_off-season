@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 public class ConsAuto {
   public enum PositionName {
-    r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, B1, B2, B3
+    r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, B1, B2, B3,Rr
   }
 
   // 預設紅方，開場自動同步一次
@@ -54,6 +54,7 @@ public class ConsAuto {
     RED_POSITIONS.put(PositionName.B1,  new Pose2d(14.5,   4.193, Rotation2d.fromDegrees(0)));
     RED_POSITIONS.put(PositionName.B2,  new Pose2d(14.5,   4.193, Rotation2d.fromDegrees(0)));
     RED_POSITIONS.put(PositionName.B3,  new Pose2d(14.5,   4.193, Rotation2d.fromDegrees(0)));
+    BLUE_POSITIONS.put(PositionName.B3,  new Pose2d(3.69, 2.609, Rotation2d.fromDegrees(180)));
 
     // BLUE
     BLUE_POSITIONS.put(PositionName.r1,  new Pose2d(3.052, 4.186, Rotation2d.fromDegrees(180)));
@@ -64,12 +65,14 @@ public class ConsAuto {
     BLUE_POSITIONS.put(PositionName.r6,  new Pose2d(5.93,  4.186, Rotation2d.fromDegrees(0)));
     BLUE_POSITIONS.put(PositionName.r7,  new Pose2d(5.93,  3.857, Rotation2d.fromDegrees(0)));
     BLUE_POSITIONS.put(PositionName.r8,  new Pose2d(5.341, 2.87,  Rotation2d.fromDegrees(-60)));
-    BLUE_POSITIONS.put(PositionName.r9,  new Pose2d(5.06,  2.702, Rotation2d.fromDegrees(-60)));
-    BLUE_POSITIONS.put(PositionName.r10, new Pose2d(3.941, 2.691, Rotation2d.fromDegrees(-120)));
+    BLUE_POSITIONS.put(PositionName.r9,  new Pose2d(4.994409931624252,  2.639007039296366, Rotation2d.fromDegrees(-60)));//
+    BLUE_POSITIONS.put(PositionName.r10, new Pose2d(3.847, 2.72, Rotation2d.fromDegrees(-120)));//
     BLUE_POSITIONS.put(PositionName.r11, new Pose2d(3.634, 2.872, Rotation2d.fromDegrees(-120)));
     BLUE_POSITIONS.put(PositionName.r12, new Pose2d(3.052, 3.854, Rotation2d.fromDegrees(180)));
     BLUE_POSITIONS.put(PositionName.B1,  new Pose2d(1,     2.194, Rotation2d.fromDegrees(180)));
     BLUE_POSITIONS.put(PositionName.B2,  new Pose2d(2.063, 4.040, Rotation2d.fromDegrees(180)));
     BLUE_POSITIONS.put(PositionName.B3,  new Pose2d(2.238, 2.194, Rotation2d.fromDegrees(180)));
+    BLUE_POSITIONS.put(PositionName.Rr,  new Pose2d(3.69, 2.609, Rotation2d.fromDegrees(-120)));
+
   }
 }

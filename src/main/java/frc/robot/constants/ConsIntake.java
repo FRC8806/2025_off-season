@@ -33,5 +33,5 @@ public class ConsIntake {
 
     //position
     public static final double upPosition = 0;//
-    public static final double downPosition =-34;//-19.13134765625//-19.69
+    public static final double downPosition =-33.5;//-19.13134765625//-19.69
 }

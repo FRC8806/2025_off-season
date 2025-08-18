@@ -11,32 +11,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.auto.AutoGetCoral;
-import frc.robot.commands.auto.AutoGetCoral2;
-import frc.robot.commands.auto.AutoPutCoral;
-import frc.robot.commands.auto.AutoTag;
-import frc.robot.commands.auto.ZeroSpeed;
-import frc.robot.commands.teleop.ReefAlign;
-import frc.robot.commands.teleop.ClimberDefaultCommand;
-import frc.robot.commands.teleop.Climberup;
-import frc.robot.commands.teleop.Climberupup;
-import frc.robot.commands.teleop.GetAlgae;
-import frc.robot.commands.teleop.GetCoral;
-import frc.robot.commands.teleop.GetCoral1;
-import frc.robot.commands.teleop.GetCoral2;
-import frc.robot.commands.teleop.L1;
-import frc.robot.commands.teleop.Outputcoral;
-import frc.robot.commands.teleop.PutAlgae;
-import frc.robot.commands.teleop.PutCoral;
-import frc.robot.constants.ConsAuto;
-import frc.robot.constants.ConsController;
-import frc.robot.constants.ConsLift;
-import frc.robot.constants.ConsSwerve;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Lift;
-import frc.robot.subsystems.Vision;
+import frc.robot.commands.auto.*;
+import frc.robot.commands.teleop.*;
+import frc.robot.constants.*;
+import frc.robot.subsystems.*;
 
 public class RobotContainer {
 
@@ -45,6 +23,7 @@ public class RobotContainer {
   private final Vision m_vision;
   private final Lift m_lift = new Lift();
   private final Climber m_climber = new Climber();
+  private final Yolo m_yolo = new Yolo(); 
 
   private final XboxController m_driveController = new XboxController(ConsController.kDriveControllerPort);
   private final XboxController m_operatorController = new XboxController(ConsController.kOperatorControllerPort);
@@ -69,9 +48,9 @@ public class RobotContainer {
   }
 
   private void setDefaultCommand() {
-    // m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber,
-    // () -> m_driveController.getRightBumperButton(),
-    // () -> m_driveController.getLeftBumperButton()));
+    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber,
+    () -> m_operatorController.getRightBumperButton(),
+    () -> m_operatorController.getLeftBumperButton()));
 
     // 1) 底盤預設：搖桿駕駛（沒有按鈕時就用這個）
     m_driveTrain.setDefaultCommand(
@@ -84,6 +63,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    new Trigger(() -> m_driveController.getXButton()).toggleOnTrue(new CoralAlign(m_yolo, m_driveTrain));
     // 3) 按住 → 跑 AprilTag2；放開 → 自動 end()（你會在 end() 裡 cancel + stop）
     new Trigger(
         () -> (m_buttonBroadController.getYButton() ||
@@ -161,7 +141,8 @@ public class RobotContainer {
     // /*
     //  * =============================================================================
     new JoystickButton(m_driveController, ConsController.Button.BUTTON_B.id).toggleOnTrue(new GetCoral(m_intake,m_lift));
-
+    // new JoystickButton(m_driveController, ConsController.Button.BUTTON_X.id).toggleOnTrue(new RunToCoral(m_driveTrain,m_yolo));
+    // new JoystickButton(m_driveController, ConsController.Button.BUTTON_X.id).whileTrue(new RunToCoral(m_driveTrain, m_yolo));
     //  * =======================================================================
     //  */
     // new JoystickButton(m_driveController,
@@ -216,8 +197,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("AlignR7", new AutoTag(m_driveTrain, ConsAuto.PositionName.r7));
     NamedCommands.registerCommand("AlignR8", new AutoTag(m_driveTrain, ConsAuto.PositionName.r8));
     NamedCommands.registerCommand("AlignR9", new AutoTag(m_driveTrain, ConsAuto.PositionName.r9));
-
+    NamedCommands.registerCommand("AlignR10", new AutoTag(m_driveTrain, ConsAuto.PositionName.r10));
+    NamedCommands.registerCommand("AlignR11", new AutoTag(m_driveTrain, ConsAuto.PositionName.r11));
     NamedCommands.registerCommand("AlignR12", new AutoTag(m_driveTrain, ConsAuto.PositionName.r12));
+    NamedCommands.registerCommand("R10andR11", new AutoTagToTag(m_driveTrain, ConsAuto.PositionName.Rr));
 
     NamedCommands.registerCommand("B3", new AutoTag(m_driveTrain, ConsAuto.PositionName.B3));
     NamedCommands.registerCommand("B2", new AutoTag(m_driveTrain, ConsAuto.PositionName.B2));
@@ -225,13 +208,12 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Lock", new ZeroSpeed(m_driveTrain));
 
-    NamedCommands.registerCommand("get coral", new AutoGetCoral(m_intake, m_lift));
+    NamedCommands.registerCommand("get coral", new GetCoral(m_intake, m_lift));
     NamedCommands.registerCommand("L3", new AutoPutCoral(m_lift, ConsLift.Pose.L3));
     NamedCommands.registerCommand("L4", new AutoPutCoral(m_lift, ConsLift.Pose.L4));
     NamedCommands.registerCommand("NG", new AutoPutCoral(m_lift, ConsLift.Pose.RESET_C));
 
-    NamedCommands.registerCommand("GetCoral", new AutoGetCoral(m_intake, m_lift));
-    NamedCommands.registerCommand("GetCoral2", new AutoGetCoral2(m_lift, m_intake));
-
+    NamedCommands.registerCommand( "GetCoral", new AutoGetCoral(m_intake, m_lift));
+    NamedCommands.registerCommand("YOLO",new CoralAlign( m_yolo, m_driveTrain));
   }
 }

@@ -97,86 +97,86 @@ public class RobotContainer {
                 () -> m_driveController.getLeftY(),
                 () -> m_driveController.getRightX(),
                 isRedAliance));
-    // new JoystickButton(m_operatorController,
-    //     ConsController.Button.BUTTON_A.id).toggleOnTrue(
-    //         new PutCoral(m_lift,
-    //             ConsLift.Pose.RESET_C));
-    // new JoystickButton(m_operatorController,
-    //     ConsController.Button.BUTTON_B.id).toggleOnTrue(
-    //         new PutCoral(m_lift,
-    //             ConsLift.Pose.L3));
-    // new JoystickButton(m_operatorController,
-    //     ConsController.Button.BUTTON_Y.id).toggleOnTrue(
-    //         new PutCoral(m_lift,
-    //             ConsLift.Pose.L4));
-    // new JoystickButton(m_operatorController,
-    //     ConsController.Button.BUTTON_X.id).toggleOnTrue(
-    //         new PutCoral(m_lift,
-    //             ConsLift.Pose.L2));
-    // new JoystickButton(m_operatorController,
-    //     ConsController.Button.BUTTON_C.id).toggleOnTrue(
-    //         new GetCoral2(m_lift,
-    //             m_intake));
-    // new JoystickButton(m_operatorController, ConsController.Button.BUTTON_Z.id)
-    //     .onTrue(new L1(m_lift, ConsLift.Pose.L1));
-    // new JoystickButton(m_operatorController,
-    //     ConsController.Button.BUTTON_Z.id).onFalse(new L1(m_lift, ConsLift.Pose.L1));
+    new JoystickButton(m_operatorController,
+        ConsController.Button.BUTTON_A.id).toggleOnTrue(
+            new PutCoral(m_lift,
+                ConsLift.Pose.RESET_C));
+    new JoystickButton(m_operatorController,
+        ConsController.Button.BUTTON_B.id).toggleOnTrue(
+            new PutCoral(m_lift,
+                ConsLift.Pose.L3));
+    new JoystickButton(m_operatorController,
+        ConsController.Button.BUTTON_Y.id).toggleOnTrue(
+            new PutCoral(m_lift,
+                ConsLift.Pose.L4));
+    new JoystickButton(m_operatorController,
+        ConsController.Button.BUTTON_X.id).toggleOnTrue(
+            new PutCoral(m_lift,
+                ConsLift.Pose.L2));
+    new JoystickButton(m_operatorController,
+        ConsController.Button.BUTTON_C.id).toggleOnTrue(
+            new GetCoral2(m_lift,
+                m_intake));
+    new JoystickButton(m_operatorController, ConsController.Button.BUTTON_Z.id)
+        .onTrue(new L1(m_lift, ConsLift.Pose.L1));
+    new JoystickButton(m_operatorController,
+        ConsController.Button.BUTTON_Z.id).onFalse(new L1(m_lift, ConsLift.Pose.L1));
 
     // /*
     //  * =============================================================================
     //  * =====================================================================
     //  */
-    // new JoystickButton(m_driveController,
-    //     ConsController.Button.BUTTON_START.id).onTrue(
-    //         new Climberupup(m_lift,
-    //             m_climber, ConsLift.Pose.climber));
-    // new JoystickButton(m_driveController,
-    //     ConsController.Button.BUTTON_BACK.id).onTrue(
-    //         new Climberup(m_lift, m_climber,
-    //             ConsLift.Pose.climber));
     new JoystickButton(m_driveController,
-        ConsController.Button.BUTTON_RB.id).whileTrue(new GetCoral1(m_intake));
+        ConsController.Button.BUTTON_START.id).onTrue(
+            new Climberupup(m_lift,
+                m_climber, ConsLift.Pose.climber));
+    new JoystickButton(m_driveController,
+        ConsController.Button.BUTTON_BACK.id).onTrue(
+            new Climberup(m_lift, m_climber,
+                ConsLift.Pose.climber));
     new JoystickButton(m_driveController,
         ConsController.Button.BUTTON_LB.id).whileTrue(new Outputcoral(m_intake));
+      new JoystickButton(m_driveController, ConsController.Button.BUTTON_RB.id).toggleOnTrue(new GetCoral(m_intake,m_lift));
+
     // /*
     //  * =============================================================================
-    new JoystickButton(m_driveController, ConsController.Button.BUTTON_B.id).toggleOnTrue(new GetCoral(m_intake,m_lift));
+    // new JoystickButton(m_driveController, ConsController.Button.BUTTON_B.id).toggleOnTrue(new Coral(m_intake,m_lift));
     // new JoystickButton(m_driveController, ConsController.Button.BUTTON_X.id).toggleOnTrue(new RunToCoral(m_driveTrain,m_yolo));
-    // new JoystickButton(m_driveController, ConsController.Button.BUTTON_X.id).whileTrue(new RunToCoral(m_driveTrain, m_yolo));
+    // new JoystickButton(m_driveController, ConsController.Button.BUTTON_X.id).whileTrue(new CoralAlign(m_yolo,m_driveTrain));
     //  * =======================================================================
     //  */
-    // new JoystickButton(m_driveController,
-    //     ConsController.Button.BUTTON_B.id).toggleOnTrue(
-    //         new GetAlgae(m_lift,
-    //             ConsLift.Pose.L3A));
-    // new JoystickButton(m_driveController,
-    //     ConsController.Button.BUTTON_X.id).toggleOnTrue(
-    //         new GetAlgae(m_lift,
-    //             ConsLift.Pose.L2A));
-    // new JoystickButton(m_driveController,
-    //     ConsController.Button.BUTTON_Y.id).onTrue(
-    //         new PutAlgae(m_lift,
-    //             ConsLift.Pose.Put_A));
+    new JoystickButton(m_driveController,
+        ConsController.Button.BUTTON_B.id).toggleOnTrue(
+                    new GetAlgae(m_lift,
+                ConsLift.Pose.L3A));
+    new JoystickButton(m_driveController,
+        ConsController.Button.BUTTON_X.id).toggleOnTrue(
+            new GetAlgae(m_lift,
+                ConsLift.Pose.L2A));
+    new JoystickButton(m_driveController,
+        ConsController.Button.BUTTON_Y.id).whileTrue(
+            new PutNet(m_lift,
+                ConsLift.Pose.Put_A));
     // new JoystickButton(m_driveController,
     //     ConsController.Button.BUTTON_Y.id).onFalse(
     //         new PutAlgae(m_lift,
     //             ConsLift.Pose.Put_A));
-    // new JoystickButton(m_driveController,
-    //     ConsController.Button.BUTTON_A.id).onTrue(
-    //         new PutAlgae(m_lift,
-    //             ConsLift.Pose.Put_a));
-    // new JoystickButton(m_driveController,
-    //     ConsController.Button.BUTTON_A.id).onFalse(
-    //         new PutAlgae(m_lift,
-    //             ConsLift.Pose.Put_a));
     new JoystickButton(m_driveController,
-        ConsController.Button.BUTTON_Y.id).toggleOnTrue(
-            new PutCoral(m_lift,
-                ConsLift.Pose.L4));
+        ConsController.Button.BUTTON_A.id).onTrue(
+            new PutAlgae(m_lift,
+                ConsLift.Pose.Put_a));
     new JoystickButton(m_driveController,
-        ConsController.Button.BUTTON_A.id).toggleOnTrue(
-            new PutCoral(m_lift,
-                ConsLift.Pose.RESET_C));
+        ConsController.Button.BUTTON_A.id).onFalse(
+            new PutAlgae(m_lift,
+                ConsLift.Pose.Put_a));
+    // new JoystickButton(m_driveController,
+    //     ConsController.Button.BUTTON_Y.id).toggleOnTrue(
+    //         new PutCoral(m_lift,
+    //             ConsLift.Pose.L4));
+    // new JoystickButton(m_driveController,
+    //     ConsController.Button.BUTTON_A.id).toggleOnTrue(
+    //         new PutCoral(m_lift,
+    //             ConsLift.Pose.RESET_C));
 
   }
 

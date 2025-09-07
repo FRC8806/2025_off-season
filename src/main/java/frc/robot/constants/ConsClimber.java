@@ -11,7 +11,7 @@ public class ConsClimber {
 
     //position
     public static final double readyPosition = -115.69;
-    public static final double finalPosition = -408.19287109375;
+    public static final double finalPosition = -422.26;
 
     //PID
     private static final Slot0Configs angleSlot0 = new Slot0Configs().withKP(2).withKI(0).withKD(0);

@@ -28,6 +28,7 @@ public class PutCoral extends Command {
   public void execute() {
     m_lift.setPose(pose);
     SmartDashboard.putBoolean("test", m_lift.isFinished(pose));
+    SmartDashboard.putNumber("lift", m_lift.getLiftPosition());
   }
 
   // Called once the command ends or is interrupted.

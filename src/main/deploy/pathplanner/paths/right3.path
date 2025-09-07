@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 1.0,
-        "y": 2.2092
+        "y": 2.1799254966887407
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6681874949435374,
-        "y": 3.5605105102282146
+        "x": 1.6174461920529801,
+        "y": 2.1581332781456943
       },
       "isLocked": false,
-      "linkedName": "ball1"
+      "linkedName": "6060"
     },
     {
       "anchor": {
-        "x": 2.6586506622516555,
-        "y": 3.799813741721854
+        "x": 3.595716059602649,
+        "y": 2.710202814569536
       },
       "prevControl": {
-        "x": 2.191611346053459,
-        "y": 3.3863330653919808
+        "x": 3.3487375827814567,
+        "y": 2.274358443708609
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "999"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 180.0
+    "rotation": -120.62999848482067
   },
   "reversed": false,
   "folder": "New Folder",

@@ -13,7 +13,7 @@ public class Climberup extends Command {
   private final Lift m_lift;
   private final Climber m_climber1;
   private final ConsLift.Pose pose;
-  private boolean wantup = false, wantupup = false, end = false;
+  private boolean  end = false;
 
   public Climberup(Lift m_lift, Climber m_climber, ConsLift.Pose pose) {
     this.m_lift = m_lift;
@@ -33,6 +33,7 @@ public class Climberup extends Command {
 
     m_climber1.setPosition(ConsClimber.readyPosition);
     m_lift.setPose(pose);
+    // SmartDashboard.putNumber("climber", )
   }
 
   @Override

@@ -19,7 +19,7 @@ public class CoralAlign extends Command {
   private double lastxC = 0.0, lastyC = 0.0;
 
   private PIDController vxController = new PIDController(7, 0, 0);
-  private PIDController vzController = new PIDController(6, 0.6, 0);
+  private PIDController vzController = new PIDController(5, 0, 0);
   private int lostTime = 0;
   private Timer detectedTime = new Timer();
 

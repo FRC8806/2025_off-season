@@ -7,6 +7,8 @@ import frc.robot.subsystems.Lift;
 public class GetAlgae extends Command {
     private Lift m_lift;
   private ConsLift.Pose pose;
+  private boolean end = false;     
+
   /** Creates a new PutAlgae. */
   public GetAlgae(Lift m_lift, ConsLift.Pose pose) {
     this.m_lift = m_lift;
@@ -26,11 +28,10 @@ public class GetAlgae extends Command {
   public void execute() {
     m_lift.setRollingSpeed(0.3);
     m_lift.setPose(pose);
-    // if(m_lift.getRollingSpeed()<1000){
-
-    // }
+    if(m_lift.isFinished(pose)){
+      end = true;
   }
-
+  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
@@ -40,6 +41,7 @@ public class GetAlgae extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_lift.isFinished(pose);
+    return m_lift.isFinished(pose) || end ;
+    
   } 
 }

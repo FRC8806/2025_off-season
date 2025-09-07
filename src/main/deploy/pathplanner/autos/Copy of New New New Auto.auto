@@ -83,12 +83,6 @@
                     }
                   ]
                 }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
-                }
               }
             ]
           }
@@ -151,7 +145,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignR10"
+                  "name": "AlignR11"
                 }
               },
               {

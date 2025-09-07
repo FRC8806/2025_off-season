@@ -23,7 +23,7 @@ public class Lift extends SubsystemBase {
 
   private PositionVoltage positionSetter = new PositionVoltage(0);
 
-  private double armSensorOffset = -0.06;
+  private double armSensorOffset = -0.4258;
   // private final PIDController armPID = new PIDController(2.5, 0.45, 0.1);// 3.6 0.3 0.2
   private double armTargetPosition = 0;
   private boolean useArmPID = false;
@@ -38,7 +38,7 @@ public class Lift extends SubsystemBase {
     armAngleConfigs.Feedback.FeedbackRemoteSensorID = ConsLift.ARM_CANCODER_ID;
     armAngleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     armAngleConfigs.Feedback.RotorToSensorRatio = 54.64;
-    armAngleConfigs.Slot0 = new Slot0Configs().withKP(25).withKI(6).withKD(0.01);
+    armAngleConfigs.Slot0 = new Slot0Configs().withKP(30).withKI(6).withKD(0.01);
     armAngleMotor.getConfigurator().apply(ConsLift.armAngleConfigs);
     armAngleMotor.setNeutralMode(NeutralModeValue.Brake);
 
@@ -57,13 +57,13 @@ public class Lift extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Lift Position", getLiftPosition());
-    SmartDashboard.putNumber("Arm Position (CANcoder)", getArmPosition());
-    SmartDashboard.putNumber("Arm Raw Sensor", getArmPositionFromSensor());
-    SmartDashboard.putNumber("Rolling Speed", getRollingSpeed());
-    SmartDashboard.putBoolean("Arm PID running", useArmPID);
-    SmartDashboard.putNumber("Arm PID Target", armTargetPosition);
-    SmartDashboard.putNumber("Arm PID Error", Math.abs(getArmPosition() - armTargetPosition));
+    // SmartDashboard.putNumber("Lift Position", getLiftPosition());
+    // SmartDashboard.putNumber("Arm Position (CANcoder)", getArmPosition());
+    // SmartDashboard.putNumber("Arm Raw Sensor", getArmPositionFromSensor());
+    // SmartDashboard.putNumber("Rolling Speed", getRollingSpeed());
+    // SmartDashboard.putBoolean("Arm PID running", useArmPID);
+    // SmartDashboard.putNumber("Arm PID Target", armTargetPosition);
+    // SmartDashboard.putNumber("Arm PID Error", Math.abs(getArmPosition() - armTargetPosition));
 
 
 
@@ -169,7 +169,6 @@ public class Lift extends SubsystemBase {
     double lift = pose.pos_lift, arm = pose.pos_arm, range = pose.range;
     if (pose.armFirst) {
       setArmPosition(arm);
-      setRollingSpeed(0.8);
       if (Math.abs(arm - getArmPosition()) <= range)
         setLiftPosition(lift);
     } else {
@@ -180,7 +179,7 @@ public class Lift extends SubsystemBase {
   }
 
   public boolean isFinished(ConsLift.Pose pose) {
-    return Math.abs(pose.pos_arm - getArmPosition()) < 0.5 &&
+    return Math.abs(pose.pos_arm - getArmPosition()) < 0.02 &&
         Math.abs(pose.pos_lift - getLiftPosition()) < 2;
   }
 

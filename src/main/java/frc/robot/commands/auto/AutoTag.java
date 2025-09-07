@@ -62,7 +62,7 @@ public class AutoTag extends SequentialCommandGroup {
             wps,
             PATH,
             null,
-            new GoalEndState(0.2, endRot) 
+            new GoalEndState(0, endRot) 
         );
         path.preventFlipping = true;
 

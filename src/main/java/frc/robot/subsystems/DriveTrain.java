@@ -71,7 +71,7 @@ public class DriveTrain extends SubsystemBase {
         ConsSwerve.Modules.D.pos
     );
 
-    SmartDashboard.putData("field", field);
+    // SmartDashboard.putData("field", field);
 
     // === PoseEstimator init ===
     poseEstimator = new SwerveDrivePoseEstimator(
@@ -138,9 +138,9 @@ public class DriveTrain extends SubsystemBase {
     poseEstimator.update(getDiretion(), getModulePositions());
 
     Pose2d pose = getPose();
-    SmartDashboard.putNumber("Robot X", pose.getX());
-    SmartDashboard.putNumber("Robot Y", pose.getY());
-    SmartDashboard.putNumber("Robot Heading (deg)", pose.getRotation().getDegrees());
+    // SmartDashboard.putNumber("Robot X", pose.getX());
+    // SmartDashboard.putNumber("Robot Y", pose.getY());
+    // SmartDashboard.putNumber("Robot Heading (deg)", pose.getRotation().getDegrees());
 
     // Rough distance tracking
     SwerveModulePosition[] currentPositions = getModulePositions();
@@ -153,7 +153,7 @@ public class DriveTrain extends SubsystemBase {
       totalDistanceMeters += distanceSum / currentPositions.length;
     }
     previousPositions = currentPositions;
-    SmartDashboard.putNumber("Total Distance (m)", totalDistanceMeters);
+    // SmartDashboard.putNumber("Total Distance (m)", totalDistanceMeters);
 
     field.setRobotPose(pose);
   }

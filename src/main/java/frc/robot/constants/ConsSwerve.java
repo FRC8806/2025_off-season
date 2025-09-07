@@ -24,8 +24,8 @@ public class ConsSwerve {
 
   public static final double kThrottleConversionFactor = kWheelDiameter * Math.PI / gearRatio_L3plus;
 
-  public static final PIDConstants TRANSLATION_PID_CONSTANTS = new PIDConstants(2.55, 0, 0.4);// 2 0 3
-  public static final PIDConstants ROTATION_PID_CONSTANTS = new PIDConstants(3.2, 0, 0.3);
+  public static final PIDConstants TRANSLATION_PID_CONSTANTS = new PIDConstants(2.55, 0.2, 0.4);//2.55, 0, 0.4 
+  public static final PIDConstants ROTATION_PID_CONSTANTS = new PIDConstants(3.2, 0.2, 0.3);//3.2, 0, 0.3
 
   private static final double maxRadius = Math.hypot(halfChassisWidth, halfChassisWidth);
 

@@ -213,9 +213,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "race",
                 "data": {
-                  "name": "get coral"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "get coral"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.5
+                      }
+                    }
+                  ]
                 }
               }
             ]

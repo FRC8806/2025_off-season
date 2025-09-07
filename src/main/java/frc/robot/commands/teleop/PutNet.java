@@ -5,13 +5,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ConsLift;
 import frc.robot.subsystems.Lift;
 
-public class L1 extends Command {
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class PutNet extends Command {
   private Lift m_lift;
   private ConsLift.Pose pose;
   private boolean finish = false, isdown = false, isup = false, output = false;
 
   /** Creates a new PutAlgae. */
-  public L1(Lift m_lift, ConsLift.Pose pose) {
+  public PutNet(Lift m_lift, ConsLift.Pose pose) {
     this.m_lift = m_lift;
     this.pose = pose;
     addRequirements(m_lift);
@@ -21,43 +22,28 @@ public class L1 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double arm = m_lift.getArmPosition();
-    double lift = m_lift.getLiftPosition();
-    if (Math.abs(arm - (-0.15)) <= 0.02 && Math.abs(lift - (-18)) <= 2) {
-      isdown = false;
-      isup = true;
-    } else {
-      isdown = true;
-      isup = false;
+    m_lift.setPose(pose);
     }
-  }
 
+  
+
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // m_lift.setPose(pose);
-
-    if (isup) {
-      m_lift.setPose(pose);
-      m_lift.setRollingSpeed(-0.25);
-    }
-    if (isdown) {
-      m_lift.setPose(pose);
-      m_lift.setRollingSpeed(0);
-      // isdown = false;
-    }
-    // SmartDashboard.putBoolean("isdown", isdown);
-    // SmartDashboard.putBoolean("isup", isup);
-
+      m_lift.setRollingSpeed(0.25);
   }
 
+  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    isdown = false;
-    isup = false;
+    m_lift.setRollingSpeed(-0.9);
+
   }
 
+  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finish;
+    return false;
   }
+
 }

@@ -80,7 +80,7 @@ public class Yolo extends SubsystemBase {
     if (Double.isNaN(xNum) || Double.isNaN(yNum)) {
       hasTarget = false;
       xc = yc = Double.NaN;
-      SmartDashboard.putString("coral/status", "no_target");
+      // SmartDashboard.putString("coral/status", "no_target");
       pushDash();
       return;
     }
@@ -106,7 +106,7 @@ public class Yolo extends SubsystemBase {
     yc = clamp(yNum, -CLAMP, CLAMP);
     hasTarget = true;
 
-    SmartDashboard.putString("coral/status", "ok");
+    // SmartDashboard.putString("coral/status", "ok");
     pushDash();
   }
 
@@ -172,7 +172,7 @@ public class Yolo extends SubsystemBase {
   }
 
   private void pushDash() {
-    SmartDashboard.putNumber("coral/xc", xc);
-    SmartDashboard.putNumber("coral/yc", yc);
+    // SmartDashboard.putNumber("coral/xc", xc);
+    // SmartDashboard.putNumber("coral/yc", yc);
   }
 }

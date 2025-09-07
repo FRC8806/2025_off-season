@@ -1,6 +1,6 @@
 package frc.robot.commands.teleop;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.constants.ConsClimber;
@@ -49,9 +49,9 @@ public class Climberupup extends Command {
     // end = true;
     // }
     // }
-    SmartDashboard.putBoolean("wantup", wantup);
-    SmartDashboard.putBoolean("wantupup", wantupup);
-    SmartDashboard.putBoolean("end", end);
+    // SmartDashboard.putBoolean("wantup", wantup);
+    // SmartDashboard.putBoolean("wantupup", wantupup);
+    // SmartDashboard.putBoolean("end", end);
 
   }
 

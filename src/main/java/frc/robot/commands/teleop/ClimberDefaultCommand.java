@@ -3,7 +3,7 @@ package frc.robot.commands.teleop;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.ConsClimber;
+// import frc.robot.constants.ConsClimber;
 import frc.robot.subsystems.Climber;
 
 public class ClimberDefaultCommand extends Command {

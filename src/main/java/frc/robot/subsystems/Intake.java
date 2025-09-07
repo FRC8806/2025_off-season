@@ -36,10 +36,10 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("intake position", getPosition());
-    SmartDashboard.putNumber("transport speed", getTransportSpeed());
-    SmartDashboard.putNumber("colorIR", getIR());
-    SmartDashboard.putNumber("rs", getRollingSpeed());
+    // SmartDashboard.putNumber("intake position", getPosition());
+    // SmartDashboard.putNumber("transport speed", getTransportSpeed());
+    // SmartDashboard.putNumber("colorIR", getIR());
+    // SmartDashboard.putNumber("rs", getRollingSpeed());
   }
   public void setRollingSpeedout(double speed){
     rollingMotor.set(-speed);

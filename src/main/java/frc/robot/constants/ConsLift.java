@@ -17,7 +17,7 @@ public class ConsLift {
   public static final double algaeSpeed = 0.8;//
 
   // PID
-  private static final Slot0Configs liftSlot0 = new Slot0Configs().withKP(1.6).withKI(0.1).withKD(0.1).withKG(0.8);//
+  private static final Slot0Configs liftSlot0 = new Slot0Configs().withKP(3).withKI(0.3).withKD(0.1).withKG(0.8);//
 
   // limit
   private static final SoftwareLimitSwitchConfigs armAngleLimit = new SoftwareLimitSwitchConfigs()
@@ -46,7 +46,7 @@ public class ConsLift {
     RESET_C(-12, 0, 0.2, true), // 中
     L2A(-20.678, -0.215, 5, false), // 中
     L3A(-50, -0.215, 10, false), // 中
-    Put_A(-58.9, -0.425, 0.2, true), // 中
+    Put_A(-59, -0.46, 1, true), // 中//-0.425//-58.9
     Put_a(-12, -0.134, 0.08, true), // 中
     DOWM_CORAL(-0.2, 0, 0.02, true), // 小小//-0.5, -0.6 / 12.15, 1/12.15,
     climber(-5, -0.08, -0.23, true), // -5, -6.0 / 12.15, 1/12.15

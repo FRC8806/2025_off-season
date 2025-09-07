@@ -1,7 +1,6 @@
 package frc.robot.commands.teleop;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.ConsIntake;
 import frc.robot.constants.ConsLift;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
@@ -48,12 +47,7 @@ public class GetCoral2 extends Command {
 
     if (isGoingUp) {
       m_lift.setPose(ConsLift.Pose.UP_CORAL);
-      // boolean liftready = Math.abs(lift - (12)) <= 10; if(liftready){
           m_lift.setRollingSpeed(0);// }
-          // m_intake.setPosition(ConsIntake.upPosition);
-          // m_intake.setTransportSpeed(0);
-          // m_intake.setRollingSpeed(0);
-
       if (lift <= -10) {
         isGoingUp = false;
         isDone = true; 

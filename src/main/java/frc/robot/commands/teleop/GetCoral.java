@@ -12,7 +12,6 @@ public class GetCoral extends Command {
   private Lift m_lift;
 
    
-  private boolean isGoingUp = false;   
   private boolean end = false;     
   private boolean isGoingDown = false;     
   private boolean start = false;       
@@ -29,6 +28,7 @@ public class GetCoral extends Command {
   public void initialize() {
     start = true;
     end = false;
+    isGoingDown = false; 
     m_intake.setPosition(ConsIntake.downPosition);
     m_intake.setTransportSpeed(ConsIntake.transportSpeed);
     m_intake.setRollingSpeed(ConsIntake.rollingSpeed);
@@ -48,7 +48,7 @@ public class GetCoral extends Command {
           m_lift.setPose(ConsLift.Pose.DOWM_CORAL);
           m_lift.setRollingSpeed(ConsLift.coralSpeed);
     
-          boolean armReady = Math.abs(arm - 0) <= 0.03;     
+          boolean armReady = Math.abs(arm - 0) <= 0.01;     
           boolean liftReady = Math.abs(lift - (0.2)) <= 1; 
           if (armReady && liftReady) {
             isGoingDown = false;
@@ -71,7 +71,9 @@ public class GetCoral extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    m_intake.setPosition(ConsIntake.upPosition);
+    m_intake.setTransportSpeed(0);
+    m_intake.setRollingSpeed(0);
   }
 
   // Returns true when the command should end.

@@ -22,9 +22,11 @@ public class PutAlgae extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    isdown = false;
+    isup = false;
     double arm = m_lift.getArmPosition();
     double lift = m_lift.getLiftPosition();
-    if (arm <= -0.38 && lift <= -57) {
+    if (arm <= -0.38 && lift <= -45) {
       isdown = false;
       isup = true;
     } else {
@@ -51,15 +53,17 @@ public class PutAlgae extends Command {
     if (isup) {
       m_lift.setPose(pose);
       m_lift.setRollingSpeed(-0.9);
+       
     }
     if (isdown) {
       m_lift.setPose(pose);
       m_lift.setRollingSpeed(0.25);
       // isdown = false;
+        
     }
-    SmartDashboard.putBoolean("isdown", isdown);
-    SmartDashboard.putBoolean("isup", isup);
-
+    // SmartDashboard.putBoolean("isdown", isdown);
+    // SmartDashboard.putBoolean("isup", isup);
+ SmartDashboard.putNumber("lift rolling", m_lift.getRollingSpeed());
   }
 
   // Called once the command ends or is interrupted.

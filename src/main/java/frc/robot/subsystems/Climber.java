@@ -19,7 +19,7 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("climber angle", getPosition());
+    // SmartDashboard.putNumber("climber angle", getPosition());
   }
 
   public void setSpeed(double speed) {
